@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Registration</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <style>
+      .container {
+        margin-top: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>User Registration</h2>
+      <form id="registrationForm">
+        <div class="form-group">
+          <label for="username">Username:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="username"
+            name="username"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            name="email"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="address">address:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="address"
+            name="address"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="about">About:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="about"
+            name="about"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            name="password"
+            required
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+        <button class="btn btn-primary" onclick="handleUserInfo()">
+          See user Info
+        </button>
+      </form>
+    </div>
+
+    <script>
+      const handleUserInfo = () => {
+        window.location.href = "Userinfo.html";
+      };
+
+      document
+        .getElementById("registrationForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          var formData = new FormData(this);
+          var userData = {};
+          formData.forEach(function (value, key) {
+            userData[key] = value;
+          });
+
+          // Example: push data to array
+          var users = JSON.parse(localStorage.getItem("users")) || [];
+          users.push(userData);
+          localStorage.setItem("users", JSON.stringify(users));
+
+          // Example: post data to a server using AJAX
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", "https://example.com/register", true);
+          xhr.setRequestHeader("Content-Type", "application/json");
+          xhr.onload = function () {
+            if (xhr.status === 200) {
+              console.log("User registered successfully");
+            } else {
+              console.error("Error registering user");
+            }
+          };
+          xhr.send(JSON.stringify(userData));
+
+          alert("user registation successfull");
+        });
+    </script>
+  </body>
+</html>

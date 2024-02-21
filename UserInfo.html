@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Information</title>
+    <link rel="stylesheet" href="UserInfo.css" />
+  </head>
+  <body>
+    <h1 class="title">Registered users</h1>
+    <div class="container" id="render"></div>
+    <script>
+      // Retrieve user data from local storage and parse it into an array
+      let userdata = JSON.parse(localStorage.getItem("users"));
+
+      // Check if userdata is an array
+      if (Array.isArray(userdata)) {
+        // Create an object to keep track of unique usernames
+        let uniqueUsernames = {};
+
+        // Use map to iterate over each user data object in the array
+        let htmlContent = userdata
+          .map((user, key) => {
+            // Check if the username is already rendered
+            if (!uniqueUsernames[user.username]) {
+              // Add the username to the uniqueUsernames object to mark it as rendered
+              uniqueUsernames[user.username] = true;
+
+              // Create HTML content for each user
+              return `
+            <div class="user-info">
+              <div class="field">
+                <label for="username">Name:</label>
+                <span id="username">${user.username}</span>
+              </div>
+              <div class="field">
+                <label for="email">Email:</label>
+                <span id="email">${user.email}</span>
+              </div>
+              <div class="field">
+                <label for="address">Address:</label>
+                <span id="address">${user.address}</span>
+              </div>
+              <div class="field">
+                <label for="about">About:</label>
+                <span id="about">${user.about}</span>
+              </div>
+            </div>`;
+            } else {
+              // If the username is already rendered, return an empty string
+              return "";
+            }
+          })
+          .join(""); // Join the array of HTML strings into a single string
+
+        // Set the HTML content to the render div
+        document.getElementById("render").innerHTML = htmlContent;
+
+        if (!htmlContent.trim()) {
+          // If no unique users were found, display an error message
+          document.getElementById("render").innerHTML =
+            "<p>No unique user data found.</p>";
+        }
+      } else {
+        // If userdata is not an array, display an error message
+        document.getElementById("render").innerHTML =
+          "<p>No user data found.</p>";
+      }
+    </script>
+  </body>
+</html>
